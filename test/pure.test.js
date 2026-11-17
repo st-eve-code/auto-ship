@@ -2,6 +2,14 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const { findSecretFiles, parseStatus, makeTitle, makeBody, makeReview, parseRepoSpec } = require("../out/pure.js");
 
+test("detects npm scripts that are not configured", () => {
+  const cwd = process.cwd();
+  assert.equal(missingScript(cwd, "npm run lint -- --fix"), "lint");
+  assert.equal(missingScript(cwd, "npm run typecheck"), null);
+  assert.equal(missingScript(cwd, "npx tsc --noEmit"), null);
+  assert.equal(missingScript(cwd, undefined), null);
+});
+
 test("parses owner/name repository specs", () => {
   assert.deepEqual(parseRepoSpec("st-eve-code/new-project"), { owner: "st-eve-code", repo: "new-project" });
   assert.deepEqual(parseRepoSpec("owner/name.git"), { owner: "owner", repo: "name" });
@@ -9,6 +17,7 @@ test("parses owner/name repository specs", () => {
   assert.equal(parseRepoSpec("https://github.com/owner/name"), null);
 });
 const { parseRemote } = require("../out/git.js");
+const { missingScript } = require("../out/fix.js");
 
 test("flags .env and key files but allows .env.example", () => {
   const found = findSecretFiles([".env", ".env.local", ".env.example", "certs/server.pem", "src/app.ts", "id_rsa"]);

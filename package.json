@@ -2,7 +2,7 @@
   "name": "auto-ship",
   "displayName": "Auto Ship",
   "description": "Commit, push, run checks, open an issue and pull request, and merge in one command.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "st-eve-code",
   "license": "MIT",
   "icon": "images/icon.png",
@@ -94,6 +94,7 @@
   },
   "scripts": {
     "compile": "tsc -p ./",
+    "typecheck": "tsc --noEmit",
     "test": "npm run compile && node --test test/pure.test.js",
     "package": "npm run compile && vsce package",
     "publish:npm": "npm run compile && cd npm && npm publish --access=public",

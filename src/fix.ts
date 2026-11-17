@@ -1,4 +1,6 @@
 import { execFile } from "child_process";
+import * as fs from "fs";
+import * as path from "path";
 import { ShipOptions, runChecks, stamp } from "./core";
 import { git, originUrl, parseRemote } from "./git";
 import { GitHub } from "./github";
@@ -24,6 +26,21 @@ function shell(cmd: string, cwd: string): Promise<{ ok: boolean; output: string 
   });
 }
 
+/* "npm run lint -- --fix" needs a "lint" script. A missing script is not a problem to report as an issue. */
+export function missingScript(cwd: string, command: string | undefined): string | null {
+  if (!command) return null;
+  const m = /^\s*npm run ([\w:-]+)/.exec(command);
+  if (!m) return null;
+  const pkgPath = path.join(cwd, "package.json");
+  if (!fs.existsSync(pkgPath)) return m[1];
+  try {
+    const scripts = JSON.parse(fs.readFileSync(pkgPath, "utf8")).scripts ?? {};
+    return scripts[m[1]] ? null : m[1];
+  } catch {
+    return m[1];
+  }
+}
+
 export type FixOutcome = { name: string; result: "clean" | "pull-request" | "issue" | "skipped"; detail: string };
 
 /* Runs each fixer from the default branch. Nothing is run while the working tree has uncommitted changes. */
@@ -44,8 +61,13 @@ export async function runFixers(opts: ShipOptions & { fixers: Fixer[] }): Promis
     await git(cwd, ["pull", "--ff-only", "origin", defaultBranch]);
 
     if (fixer.fix) {
-      const run = await shell(fixer.fix, cwd);
-      log(`${fixer.name}: fix ${run.ok ? "finished" : "exited with an error"}`);
+      const missing = missingScript(cwd, fixer.fix);
+      if (missing) {
+        log(`${fixer.name}: fix skipped - no "${missing}" script in package.json`);
+      } else {
+        const run = await shell(fixer.fix, cwd);
+        log(`${fixer.name}: fix ${run.ok ? "finished - checking for changed files" : "exited with an error"}`);
+      }
     }
 
     const changes = parseStatus(await git(cwd, ["status", "--porcelain", "-uall"]));
@@ -60,7 +82,7 @@ export async function runFixers(opts: ShipOptions & { fixers: Fixer[] }): Promis
 
       const issue = await gh.createIssue(title, body);
       const pr = await gh.createPullRequest(title, `${body}\n\nCloses #${issue}`, branch, defaultBranch);
-      log(`${fixer.name}: opened issue #${issue} and pull request #${pr.number}`);
+      log(`${fixer.name}: fix changed files - opened issue #${issue} and pull request #${pr.number}`);
 
       const results = await runChecks(cwd, opts.checks);
       await gh.postReview(pr.number, makeReview(results, branch));
@@ -77,10 +99,15 @@ export async function runFixers(opts: ShipOptions & { fixers: Fixer[] }): Promis
       continue;
     }
 
-    if (!fixer.check) {
-      outcomes.push({ name: fixer.name, result: "clean", detail: "nothing to fix" });
+    const missingCheck = missingScript(cwd, fixer.check);
+    if (!fixer.check || missingCheck) {
+      log(fixer.check
+        ? `${fixer.name}: check skipped - no "${missingCheck}" script in package.json`
+        : `${fixer.name}: no fix to run and no check configured`);
+      outcomes.push({ name: fixer.name, result: "skipped", detail: "script not configured" });
       continue;
     }
+
     const report = await shell(fixer.check, cwd);
     if (report.ok) {
       log(`${fixer.name}: no problems found`);
@@ -90,7 +117,7 @@ export async function runFixers(opts: ShipOptions & { fixers: Fixer[] }): Promis
 
     const title = `Fix problems reported by ${fixer.name}`;
     if (await gh.findOpenIssue(title)) {
-      log(`${fixer.name}: an open issue already exists`);
+      log(`${fixer.name}: cannot auto-fix these problems - an issue is already open`);
       outcomes.push({ name: fixer.name, result: "skipped", detail: "open issue already exists" });
       continue;
     }
@@ -103,7 +130,7 @@ export async function runFixers(opts: ShipOptions & { fixers: Fixer[] }): Promis
       "```",
     ].join("\n");
     const issue = await gh.createIssue(title, body);
-    log(`${fixer.name}: opened issue #${issue}`);
+    log(`${fixer.name}: cannot auto-fix these problems - opened issue #${issue} with the tool output`);
     outcomes.push({ name: fixer.name, result: "issue", detail: `issue #${issue}` });
   }
 
