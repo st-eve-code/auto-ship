@@ -33,16 +33,6 @@
   "bin": {
     "auto-ship": "out/cli.js"
   },
-  "files": [
-    "out/cli.js",
-    "out/core.js",
-    "out/fix.js",
-    "out/git.js",
-    "out/github.js",
-    "out/pure.js",
-    "README.md",
-    "LICENSE"
-  ],
   "contributes": {
     "commands": [
       {
