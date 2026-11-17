@@ -22,6 +22,7 @@ Auto Ship runs one cycle per run. It doesn't pick up existing issues or write fi
 ## Links
 
 - **npm package:** [@st-eve-code/auto-ship](https://www.npmjs.com/package/@st-eve-code/auto-ship) — `npx @st-eve-code/auto-ship -a`
+- **GitHub package:** [@st-eve-code/auto-ship](https://github.com/st-eve-code/auto-ship/pkgs/npm/auto-ship)
 - **VS Code extension:** [Auto Ship on the Marketplace](https://marketplace.visualstudio.com/items?itemName=st-eve-code.auto-ship)
 
 ## Requirements
