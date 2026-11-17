@@ -1,0 +1,37 @@
+{
+  "name": "@st-eve-code/auto-ship",
+  "version": "0.1.0",
+  "description": "Commit, push, check, open an issue and pull request, and merge in one command.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/st-eve-code/auto-ship.git"
+  },
+  "bugs": {
+    "url": "https://github.com/st-eve-code/auto-ship/issues"
+  },
+  "homepage": "https://github.com/st-eve-code/auto-ship#readme",
+  "keywords": [
+    "git",
+    "github",
+    "commit",
+    "pull request",
+    "automation",
+    "issues",
+    "review"
+  ],
+  "bin": {
+    "auto-ship": "out/cli.js"
+  },
+  "files": [
+    "out",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "prepack": "node ../scripts/prepare-npm.js"
+  }
+}

@@ -28,13 +28,19 @@ Open the command palette and run **Auto Ship: Commit, Push, Review and Merge**.
 
 ## Use it from a terminal
 
-Install the command-line tool from a checkout of this repository:
+Install the command-line tool from npm:
 
 ```bash
-npm install
-npm run compile
-npm link
+npx @st-eve-code/auto-ship -a
 ```
+
+Or install it globally:
+
+```bash
+npm install -g @st-eve-code/auto-ship
+```
+
+For a local checkout, run `npm install && npm run compile && npm link` instead.
 
 Then, in any project folder:
 

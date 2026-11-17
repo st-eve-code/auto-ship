@@ -1,3 +1,5 @@
 node_modules/
 out/
+npm/out/
+npm/*.tgz
 *.vsix
