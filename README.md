@@ -1,5 +1,9 @@
 # Auto Ship
 
+[![npm version](https://img.shields.io/npm/v/@st-eve-code/auto-ship)](https://www.npmjs.com/package/@st-eve-code/auto-ship)
+[![npm downloads](https://img.shields.io/npm/dm/@st-eve-code/auto-ship)](https://www.npmjs.com/package/@st-eve-code/auto-ship)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue)](https://marketplace.visualstudio.com/items?itemName=st-eve-code.auto-ship)
+
 Ship your changes to GitHub in one step. Auto Ship:
 
 1. Checks that no secret files (such as `.env`) are being committed.
@@ -14,6 +18,11 @@ Ship your changes to GitHub in one step. Auto Ship:
 If a check fails, the pull request stays open and the failing output is in the review comment.
 
 Auto Ship runs one cycle per run. It doesn't pick up existing issues or write fixes for them.
+
+## Links
+
+- **npm package:** [@st-eve-code/auto-ship](https://www.npmjs.com/package/@st-eve-code/auto-ship) — `npx @st-eve-code/auto-ship -a`
+- **VS Code extension:** [Auto Ship on the Marketplace](https://marketplace.visualstudio.com/items?itemName=st-eve-code.auto-ship)
 
 ## Requirements
 
