@@ -1,0 +1,95 @@
+{
+  "name": "auto-ship",
+  "displayName": "Auto Ship",
+  "description": "Commit, push, run checks, open an issue and pull request, and merge in one command.",
+  "version": "0.1.0",
+  "publisher": "st-eve-code",
+  "license": "MIT",
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/st-eve-code/auto-ship.git"
+  },
+  "bugs": {
+    "url": "https://github.com/st-eve-code/auto-ship/issues"
+  },
+  "keywords": [
+    "git",
+    "github",
+    "commit",
+    "pull request",
+    "automation",
+    "issues",
+    "review"
+  ],
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "SCM Providers",
+    "Other"
+  ],
+  "main": "./out/extension.js",
+  "bin": {
+    "auto-ship": "./out/cli.js"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "autoShip.run",
+        "title": "Auto Ship: Commit, Push, Review and Merge"
+      }
+    ],
+    "configuration": {
+      "title": "Auto Ship",
+      "properties": {
+        "autoShip.checks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "lint",
+            "typecheck"
+          ],
+          "description": "npm scripts to run as the review. A script that is missing from package.json is skipped."
+        },
+        "autoShip.autoMerge": {
+          "type": "boolean",
+          "default": true,
+          "description": "Merge the pull request automatically when every check passes."
+        },
+        "autoShip.syncAfterMerge": {
+          "type": "boolean",
+          "default": true,
+          "description": "After merging, switch to the default branch and pull the merged changes."
+        },
+        "autoShip.confirm": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the list of files and ask before committing."
+        },
+        "autoShip.repository": {
+          "type": "string",
+          "default": "",
+          "description": "GitHub repository (owner/name) to use when the folder has no origin remote. It is created if it does not exist."
+        },
+        "autoShip.private": {
+          "type": "boolean",
+          "default": false,
+          "description": "Create the repository as private when autoShip.repository is used to create it."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "test": "npm run compile && node --test test/pure.test.js",
+    "package": "npm run compile && vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.4.0"
+  }
+}
