@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "auto-ship",
   "displayName": "Auto Ship",
   "description": "Commit, push, run checks, open an issue and pull request, and merge in one command.",
@@ -8,7 +8,7 @@
   "icon": "images/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/st-eve-code/auto-ship.git"
+    "url": "git+https://github.com/st-eve-code/auto-ship.git"
   },
   "bugs": {
     "url": "https://github.com/st-eve-code/auto-ship/issues"
@@ -31,7 +31,7 @@
   ],
   "main": "./out/extension.js",
   "bin": {
-    "auto-ship": "./out/cli.js"
+    "auto-ship": "out/cli.js"
   },
   "files": [
     "out/cli.js",
@@ -55,8 +55,13 @@
       "properties": {
         "autoShip.checks": {
           "type": "array",
-          "items": { "type": "string" },
-          "default": ["lint", "typecheck"],
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "lint",
+            "typecheck"
+          ],
           "description": "npm scripts to run as the review. A script that is missing from package.json is skipped."
         },
         "autoShip.autoMerge": {
