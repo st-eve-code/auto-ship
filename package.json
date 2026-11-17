@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "auto-ship",
   "displayName": "Auto Ship",
   "description": "Commit, push, run checks, open an issue and pull request, and merge in one command.",
@@ -33,6 +33,16 @@
   "bin": {
     "auto-ship": "./out/cli.js"
   },
+  "files": [
+    "out/cli.js",
+    "out/core.js",
+    "out/fix.js",
+    "out/git.js",
+    "out/github.js",
+    "out/pure.js",
+    "README.md",
+    "LICENSE"
+  ],
   "contributes": {
     "commands": [
       {
@@ -45,13 +55,8 @@
       "properties": {
         "autoShip.checks": {
           "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [
-            "lint",
-            "typecheck"
-          ],
+          "items": { "type": "string" },
+          "default": ["lint", "typecheck"],
           "description": "npm scripts to run as the review. A script that is missing from package.json is skipped."
         },
         "autoShip.autoMerge": {
@@ -77,7 +82,7 @@
         "autoShip.private": {
           "type": "boolean",
           "default": false,
-          "description": "Create the repository as private when autoShip.repository is used to create it."
+          "description": "Create the repository as private when it is created from autoShip.repository."
         }
       }
     }
@@ -85,7 +90,8 @@
   "scripts": {
     "compile": "tsc -p ./",
     "test": "npm run compile && node --test test/pure.test.js",
-    "package": "npm run compile && vsce package"
+    "package": "npm run compile && vsce package",
+    "prepublishOnly": "npm run compile"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
