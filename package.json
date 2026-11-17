@@ -96,7 +96,7 @@
     "compile": "tsc -p ./",
     "test": "npm run compile && node --test test/pure.test.js",
     "package": "npm run compile && vsce package",
-    "publish:npm": "npm run compile && npm --prefix npm publish --access=public",
+    "publish:npm": "npm run compile && cd npm && npm publish --access=public",
     "prepublishOnly": "npm run compile"
   },
   "devDependencies": {
